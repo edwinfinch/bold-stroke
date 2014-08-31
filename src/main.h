@@ -27,3 +27,6 @@ const int vibes_lock = 5;
 //vibes_fired will keep track of how many vibrations have been fired while
 //the arm is held up
 int vibes_fired = 0;
+
+//if you want to see direct variables change this to true
+bool debug = false;

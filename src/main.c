@@ -29,7 +29,9 @@ void accel_data_handler(AccelData *data, uint32_t num_samples) {
         miss_count = 0;
 		vibes_fired = 0;
     }
-	APP_LOG(APP_LOG_LEVEL_INFO, "Hit: %d miss: %d vibes fired: %d", hit_count, miss_count, vibes_fired);
+	if(debug){ 
+		APP_LOG(APP_LOG_LEVEL_INFO, "Hit: %d miss: %d vibes fired: %d", hit_count, miss_count, vibes_fired); 
+	}
 }
 	
 void tick_handler(struct tm *t, TimeUnits units_changed){
