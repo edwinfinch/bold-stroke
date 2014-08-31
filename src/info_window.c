@@ -95,6 +95,7 @@ void window_unload_info(Window *w){
 	text_layer_destroy(miss_tl);
 	text_layer_destroy(hit_tl);
 	text_layer_destroy(temp_v_tl);
+	text_layer_destroy(isdisabled_tl);
 	info_exists = false;
 }
 
