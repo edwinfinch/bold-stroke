@@ -1,10 +1,16 @@
 #include <pebble.h>
 #include "main.h"
+#include "info_window.h"
  
 void try_vibration(){
 	if(vibes_lock > vibes_fired){
 		vibes_short_pulse();
 		vibes_fired++;
+		vibes_total++;
+		vibes_disabled = false;
+	}
+	else{
+		vibes_disabled = true;
 	}
 }
 	
@@ -28,9 +34,15 @@ void accel_data_handler(AccelData *data, uint32_t num_samples) {
         hit_count = 0;
         miss_count = 0;
 		vibes_fired = 0;
+		vibes_disabled = false;
     }
 	if(debug){ 
 		APP_LOG(APP_LOG_LEVEL_INFO, "Hit: %d miss: %d vibes fired: %d", hit_count, miss_count, vibes_fired); 
+	}
+	if(info_window_exists()){
+		int16_t y = data[0].y;
+		int16_t x = data[0].x;
+		refresh_info(y, x, vibes_total, miss_count, hit_count, vibes_disabled, vibes_fired);
 	}
 }
 	
@@ -46,6 +58,13 @@ void tick_handler(struct tm *t, TimeUnits units_changed){
 	strftime(date_buffer,sizeof(date_buffer),"%d. %B %Y", t);
 	text_layer_set_text(time_layer, time_buffer);
 	text_layer_set_text(date_layer, date_buffer);
+	
+	int hours = t->tm_hour;
+	int minutes = t->tm_min;
+	//Reset daily
+	if(hours == 0 && minutes == 0){
+		vibes_total = 0;
+	}
 }
 
 void battery_proc(Layer *layer, GContext *ctx){
@@ -102,6 +121,11 @@ void bt_handler(bool connected){
 	layer_set_hidden(inverter_layer_get_layer(bt_layer), !connected);
 }
 
+void click_config(){
+	window_single_click_subscribe(BUTTON_ID_SELECT, (ClickHandler)select);
+	window_single_click_subscribe(BUTTON_ID_BACK, (ClickHandler)back);
+}
+
 void window_load(Window *window){
 	Layer *window_layer = window_get_root_layer(window);
 	
@@ -156,10 +180,12 @@ void window_unload(Window *window){
 	
 void init(){
 	window = window_create();
+	window_set_fullscreen(window, true);
 	window_set_window_handlers(window, (WindowHandlers){
 		.load = window_load,
 		.unload = window_unload,
 	});
+	info_window_init();
 	tick_timer_service_subscribe(MINUTE_UNIT, &tick_handler);
 	battery_state_service_subscribe(battery_handler);
 	bluetooth_connection_service_subscribe(bt_handler);
@@ -169,6 +195,8 @@ void init(){
 	
 	accel_data_service_subscribe(10, accel_data_handler);
     accel_service_set_sampling_rate(ACCEL_SAMPLING_10HZ);
+	
+	window_set_click_config_provider(window, click_config);
 	
 	window_stack_push(window, true);
 }
@@ -181,6 +209,7 @@ void deinit(){
 	battery_state_service_unsubscribe();
 	accel_data_service_unsubscribe();
 	bluetooth_connection_service_unsubscribe();
+	info_window_deinit();
 }
 
 int main(){

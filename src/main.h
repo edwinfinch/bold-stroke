@@ -28,5 +28,10 @@ const int vibes_lock = 5;
 //the arm is held up
 int vibes_fired = 0;
 
+//keeps track of the total vibes in a day
+int32_t vibes_total = 0;
+
+bool vibes_disabled = false;
+
 //if you want to see direct variables change this to true
 bool debug = false;
