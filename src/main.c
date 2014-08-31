@@ -1,18 +1,29 @@
 #include <pebble.h>
-	
-Window *window;
-BitmapLayer *bt_icon_layer;
-GBitmap *bt_icon;
-TextLayer *time_layer, *date_layer;
-Layer *battery_layer;
-InverterLayer *bt_layer;
-InverterLayer *theme;
-GFont *BOLD, *pixelmix;
-AppTimer *charge_timer;
-bool cancelled = 0;
-bool phone_is_connected = 0;
-int battery_percent;
-bool invert;
+#include "main.h"
+ 
+void accel_data_handler(AccelData *data, uint32_t num_samples) {
+	APP_LOG(APP_LOG_LEVEL_INFO, "%d", (int)num_samples);
+    for(uint32_t i = 0; i < num_samples; i++) {
+        if(data[i].x<=-600 && data[i].y>=600) {
+            miss_count = 0;
+            hit_count++;
+        }
+        else {
+            hit_count = 0;
+            miss_count++;
+        }
+    }
+    if(hit_count>delay) {
+        vibes_short_pulse();
+        hit_count = 0;
+        miss_count = 0;
+    }
+    if(miss_count>delay) {
+        hit_count = 0;
+        miss_count = 0;
+    }
+	APP_LOG(APP_LOG_LEVEL_INFO, "Hit: %d miss: %d", hit_count, miss_count);
+}
 	
 void tick_handler(struct tm *t, TimeUnits units_changed){
 	static char time_buffer[] = "00:00";
@@ -146,6 +157,10 @@ void init(){
 	BOLD = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_BOLD_50));
 	pixelmix = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_PIXELMIX_12));
 	bt_icon = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BT_ICON);
+	
+	accel_data_service_subscribe(10, accel_data_handler);
+    accel_service_set_sampling_rate(ACCEL_SAMPLING_10HZ);
+	
 	window_stack_push(window, true);
 }
 
@@ -155,6 +170,7 @@ void deinit(){
 	gbitmap_destroy(bt_icon);
 	tick_timer_service_unsubscribe();
 	battery_state_service_unsubscribe();
+	accel_data_service_unsubscribe();
 	bluetooth_connection_service_unsubscribe();
 }
 

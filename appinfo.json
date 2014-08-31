@@ -9,15 +9,9 @@
     "resources": {
         "media": [
             {
-                "file": "images/rsz_1download.png",
-                "menuIcon": true,
-                "name": "IMAGE_MENU_ICON",
-                "type": "png"
-            },
-            {
-                "file": "images/bt-iconpng.png",
-                "name": "IMAGE_BT_ICON",
-                "type": "png"
+                "file": "fonts/04B_19__.TTF",
+                "name": "FONT_BOLD_50",
+                "type": "font"
             },
             {
                 "file": "fonts/pixelmix.ttf",
@@ -25,9 +19,15 @@
                 "type": "font"
             },
             {
-                "file": "fonts/04B_19__.TTF",
-                "name": "FONT_BOLD_50",
-                "type": "font"
+                "file": "images/bt-iconpng.png",
+                "name": "IMAGE_BT_ICON",
+                "type": "png"
+            },
+            {
+                "file": "images/rsz_1download.png",
+                "menuIcon": true,
+                "name": "IMAGE_MENU_ICON",
+                "type": "png"
             }
         ]
     },
