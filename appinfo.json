@@ -34,7 +34,7 @@
     "shortName": "BOLD",
     "uuid": "055d7576-e98d-440e-96c3-e38a6049c0e8",
     "versionCode": 1,
-    "versionLabel": "1.1",
+    "versionLabel": "1.2",
     "watchapp": {
         "watchface": false
     }

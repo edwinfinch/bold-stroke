@@ -16,7 +16,7 @@ void try_vibration(){
 	
 void accel_data_handler(AccelData *data, uint32_t num_samples) {
     for(uint32_t i = 0; i < num_samples; i++) {
-        if(data[i].x<=-600 && data[i].y>=600) {
+        if(data[i].x<=-600) {
             miss_count = 0;
             hit_count++;
         }
