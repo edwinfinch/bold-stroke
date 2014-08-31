@@ -1,0 +1,41 @@
+{
+    "appKeys": {},
+    "capabilities": [
+        ""
+    ],
+    "companyName": "Edwin & Philipp",
+    "longName": "BOLD",
+    "projectType": "native",
+    "resources": {
+        "media": [
+            {
+                "file": "images/rsz_1download.png",
+                "menuIcon": true,
+                "name": "IMAGE_MENU_ICON",
+                "type": "png"
+            },
+            {
+                "file": "images/bt-iconpng.png",
+                "name": "IMAGE_BT_ICON",
+                "type": "png"
+            },
+            {
+                "file": "fonts/pixelmix.ttf",
+                "name": "FONT_PIXELMIX_12",
+                "type": "font"
+            },
+            {
+                "file": "fonts/04B_19__.TTF",
+                "name": "FONT_BOLD_50",
+                "type": "font"
+            }
+        ]
+    },
+    "shortName": "BOLD",
+    "uuid": "055d7576-e98d-440e-96c3-e38a6049c0e8",
+    "versionCode": 1,
+    "versionLabel": "1.01",
+    "watchapp": {
+        "watchface": true
+    }
+}
