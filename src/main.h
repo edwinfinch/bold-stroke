@@ -21,3 +21,9 @@ int delay = 10;
 //tweak these numbers for the Pebble position, think this is upright'ish. RTFM
 int posx = -600;
 int posy = 600;
+
+//adjust this number for the amount of vibes you want set off before it stops
+const int vibes_lock = 5;
+//vibes_fired will keep track of how many vibrations have been fired while
+//the arm is held up
+int vibes_fired = 0;

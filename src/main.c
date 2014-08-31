@@ -1,8 +1,14 @@
 #include <pebble.h>
 #include "main.h"
  
+void try_vibration(){
+	if(vibes_lock > vibes_fired){
+		vibes_short_pulse();
+		vibes_fired++;
+	}
+}
+	
 void accel_data_handler(AccelData *data, uint32_t num_samples) {
-	APP_LOG(APP_LOG_LEVEL_INFO, "%d", (int)num_samples);
     for(uint32_t i = 0; i < num_samples; i++) {
         if(data[i].x<=-600 && data[i].y>=600) {
             miss_count = 0;
@@ -13,16 +19,17 @@ void accel_data_handler(AccelData *data, uint32_t num_samples) {
             miss_count++;
         }
     }
-    if(hit_count>delay) {
-        vibes_short_pulse();
+    if(hit_count > delay) {
+        try_vibration();
         hit_count = 0;
         miss_count = 0;
     }
-    if(miss_count>delay) {
+    if(miss_count > delay) {
         hit_count = 0;
         miss_count = 0;
+		vibes_fired = 0;
     }
-	APP_LOG(APP_LOG_LEVEL_INFO, "Hit: %d miss: %d", hit_count, miss_count);
+	APP_LOG(APP_LOG_LEVEL_INFO, "Hit: %d miss: %d vibes fired: %d", hit_count, miss_count, vibes_fired);
 }
 	
 void tick_handler(struct tm *t, TimeUnits units_changed){
